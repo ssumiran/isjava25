@@ -1,4 +1,4 @@
-package j.jav25.taskmanagement.exception;
+package j.jav25.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
