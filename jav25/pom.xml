@@ -55,7 +55,14 @@
 	      <artifactId>lombok</artifactId>
 	      <optional>true</optional>
 	    </dependency>
-
+	    
+<!--to convert DTO to Entity and Entity to DTO -->
+		<dependency>
+		    <groupId>org.modelmapper</groupId>
+		    <artifactId>modelmapper</artifactId>
+		    <version>3.2.7</version>
+		    <scope>compile</scope>
+		</dependency>
 
 
 <!--test-->
