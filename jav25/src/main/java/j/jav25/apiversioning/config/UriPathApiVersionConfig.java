@@ -16,6 +16,6 @@ public class UriPathApiVersionConfig implements WebMvcConfigurer {
         // /api/v3.0/products
         configurer.addSupportedVersions("1.0", "2.0", "3.0")
                 .setDefaultVersion(null)
-                .usePathSegment(1);  // path segment (index 0 is /api; index 1 is /v{version}
+                .usePathSegment(1);  // path segment(index 0 is /api; index 1 is /v{version} ie /v2.0  )
     }
 }
