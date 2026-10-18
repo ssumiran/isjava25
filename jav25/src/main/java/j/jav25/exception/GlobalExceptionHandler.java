@@ -11,15 +11,31 @@ import org.springframework.web.context.request.WebRequest;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+	//Handle specific Exception - AccountException
+	@ExceptionHandler(AccountException.class)
 	public ResponseEntity<ErrorDetails> handleAccountException(
 			AccountException ex, WebRequest webReq){
 		
 		ErrorDetails errorDetails = new ErrorDetails (
 				LocalDateTime.now(),
-				ex.getMessage()
-				webReq.getDescription("false"), 
+				ex.getMessage(),
+				webReq.getDescription(false), 
 				"Account Not FOUND");
 		
-		return new ResponseEntity<ErrorDetails>(errorDetails, HttpStatus.CONFLICT);
+		return new ResponseEntity<ErrorDetails>(errorDetails, HttpStatus.NOT_FOUND);
+	}
+	
+	//Handle Generic Exception
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<ErrorDetails> handleGenericException(
+			Exception ex, WebRequest webReq){
+		
+		ErrorDetails errorDetails = new ErrorDetails (
+				LocalDateTime.now(),
+				ex.getMessage(),
+				webReq.getDescription(false), 
+				"Intenal Server Error");
+		
+		return new ResponseEntity<ErrorDetails>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }
