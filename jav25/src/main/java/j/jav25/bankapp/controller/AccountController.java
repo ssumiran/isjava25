@@ -83,7 +83,8 @@ public class AccountController {
         return ResponseEntity.ok("Transfer fund is successfully!");
     }
     
-    
+    //Get all Transaction By accountId
+    @GetMapping("/{id}/transactions")
     public ResponseEntity<List<TransactionDto>> fetchAccountTransaction (Long accountId){
     	List<TransactionDto> transaction = accountService.getAccountTransactions(accountId);
     	
