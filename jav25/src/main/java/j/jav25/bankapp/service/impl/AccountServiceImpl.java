@@ -1,14 +1,18 @@
 package j.jav25.bankapp.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import j.jav25.bankapp.dto.AccountDto;
+import j.jav25.bankapp.dto.TransactionDto;
 import j.jav25.bankapp.dto.TransferFundDto;
 import j.jav25.bankapp.entity.Account;
+import j.jav25.bankapp.entity.Transaction;
 import j.jav25.bankapp.repository.AccountRepository;
+import j.jav25.bankapp.repository.TransactionRepository;
 import j.jav25.bankapp.service.AccountService;
 import j.jav25.exception.AccountException;
 
@@ -16,9 +20,15 @@ import j.jav25.exception.AccountException;
 public class AccountServiceImpl implements AccountService {
 
     private AccountRepository accountRepository;
+    private TransactionRepository transactionRepository;
+    
+    private static final String TRANSACTION_TYPE_DEPOSIT = "DEPOSIT";
+    private static final String TRANSACTION_TYPE_WITHDRAW = "WITHDRAW";
+    private static final String TRANSACTION_TYPE_TRANSFER = "TRANSFER";
 
-    public AccountServiceImpl(AccountRepository accountRepository) {
+    public AccountServiceImpl(AccountRepository accountRepository, TransactionRepository transactionRepository) {
         this.accountRepository = accountRepository;
+        this.transactionRepository = transactionRepository;
     }
 
     @Override
@@ -45,6 +55,15 @@ public class AccountServiceImpl implements AccountService {
         double total = account.getBalance() + amount;
         account.setBalance(total);
         Account savedAccount = accountRepository.save(account);
+        
+        Transaction transaction = new Transaction();
+        transaction.setAccountId(id);
+        transaction.setAmount(amount);
+        transaction.setTransactionType(TRANSACTION_TYPE_DEPOSIT);
+        transaction.setTimestamp(LocalDateTime.now());
+        
+        transactionRepository.save(transaction);
+        
         return AccountDto.mapToAccountDto(savedAccount);
     }
 
@@ -62,6 +81,14 @@ public class AccountServiceImpl implements AccountService {
         account.setBalance(total);
         Account savedAccount = accountRepository.save(account);
 
+        Transaction transaction = new Transaction();
+        transaction.setAccountId(id);
+        transaction.setAmount(amount);
+        transaction.setTransactionType(TRANSACTION_TYPE_WITHDRAW);
+        transaction.setTimestamp(LocalDateTime.now());
+        
+        transactionRepository.save(transaction);
+        
         return AccountDto.mapToAccountDto(savedAccount);
     }
 
@@ -100,5 +127,32 @@ public class AccountServiceImpl implements AccountService {
 		//Save the accounts
 		accountRepository.save(fromAccount);
 		accountRepository.save(toAccount);
+		
+		Transaction transaction = new Transaction();
+        transaction.setAccountId(transferFundDto.fromAccountId());
+        transaction.setAmount(transferFundDto.amount());
+        transaction.setTransactionType(TRANSACTION_TYPE_TRANSFER);
+        transaction.setTimestamp(LocalDateTime.now());
+        
+        transactionRepository.save(transaction);
+	}
+
+	@Override
+	public List<TransactionDto> getAccountTransactions(Long accountId) {
+		List<Transaction> transactions = transactionRepository
+				.findByAccountIdOrderByTimestampDesc(accountId);
+		
+		return transactions.stream()
+			.map( t -> convertEntityToDto(t))
+			.collect( Collectors.toList());
+	}	
+	
+	private TransactionDto convertEntityToDto(Transaction t) {
+		return new TransactionDto(
+				t.getId(),
+				t.getAccountId(),
+				t.getAmount(),
+				t.getTransactionType(),
+				t.getTimestamp());
 	}
 }
