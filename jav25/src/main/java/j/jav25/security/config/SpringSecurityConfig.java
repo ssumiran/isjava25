@@ -69,7 +69,7 @@ public class SpringSecurityConfig {
 	}
 	
 	//Create more Users using UserDetailService in Memory. This bean is hardcoded users
-	@Bean   
+/*	@Bean   
 	public UserDetailsService userDetailsService() {
 		
 		UserDetails user1 = User.builder()
@@ -86,6 +86,6 @@ public class SpringSecurityConfig {
 		
 		return new InMemoryUserDetailsManager(user1,user2);
 	}
-	
+*/	
 		
 }
