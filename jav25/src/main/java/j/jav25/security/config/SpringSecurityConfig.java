@@ -65,6 +65,7 @@ public class SpringSecurityConfig {
 			//	.requestMatchers("/security/admin").hasRole("ADMIN")
 				
 				.requestMatchers("/security/welcome").permitAll()
+				.requestMatchers("/security/auth/**").permitAll()
 				.anyRequest().authenticated()
 		);        	
 		
