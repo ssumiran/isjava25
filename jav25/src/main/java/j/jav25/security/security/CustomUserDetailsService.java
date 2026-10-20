@@ -27,17 +27,21 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
 
+    	//Get user from Database
         SecUser secUser = secUserRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
                 .orElseThrow(
                         () -> new UsernameNotFoundException("User not found with username or email: " + usernameOrEmail)
                 );
 
+        //Get user Roles
         Set<SecRole> secRoles = secUser.getSecRoles();
 
+        //Put in GrantedAuthority interface
         Set<GrantedAuthority> authorities = secRoles.stream()
                 .map((role) -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toSet());
 
+        //return User calling User Constructor
         return new User(usernameOrEmail,  secUser.getPassword(), authorities);
     }
 }
