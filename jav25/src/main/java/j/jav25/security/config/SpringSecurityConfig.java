@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+import j.jav25.security.exception.CustomAccessDeniedHandler;
 import j.jav25.security.exception.CustomAuthenticationEntryPoint;
 
 
@@ -75,6 +76,9 @@ public class SpringSecurityConfig {
 			//Using Custom Exception AuthenticationEntryPoint	
 			basicAuth -> basicAuth.authenticationEntryPoint(new CustomAuthenticationEntryPoint())	
 		); 
+		
+		//Using Custom Exception to handle AccessDenielHandler()	
+		http.exceptionHandling(ex -> ex.accessDeniedHandler(new CustomAccessDeniedHandler()));
 		
 		//Disable Cross-Site Request Forgery
 		http.csrf(csrf -> csrf.disable());
