@@ -18,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+import j.jav25.security.exception.CustomAuthenticationEntryPoint;
+
 
 @Configuration
 @EnableMethodSecurity
@@ -68,7 +70,11 @@ public class SpringSecurityConfig {
 		//http.formLogin(withDefaults());   //Activate default Form Login for Browser
 		http.formLogin(form -> form.disable());   //Disable Form Login for Browser
 		
-		http.httpBasic(withDefaults());  //Activate default Form Login for PostMan
+		http.httpBasic(//withDefaults()  //Activate default Form Login for PostMan
+				
+			//Using Custom Exception AuthenticationEntryPoint	
+			basicAuth -> basicAuth.authenticationEntryPoint(new CustomAuthenticationEntryPoint())	
+		); 
 		
 		//Disable Cross-Site Request Forgery
 		http.csrf(csrf -> csrf.disable());
