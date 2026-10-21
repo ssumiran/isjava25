@@ -20,6 +20,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import j.jav25.security.exception.CustomAccessDeniedHandler;
 import j.jav25.security.exception.CustomAuthenticationEntryPoint;
+import j.jav25.security.security.JwtAuthenticationEntryPoint;
 
 
 @Configuration
@@ -75,7 +76,10 @@ public class SpringSecurityConfig {
 		http.httpBasic(//withDefaults()  //Activate default Form Login for PostMan
 				
 			//Using Custom Exception AuthenticationEntryPoint	
-			basicAuth -> basicAuth.authenticationEntryPoint(new CustomAuthenticationEntryPoint())	
+			//basicAuth -> basicAuth.authenticationEntryPoint(new CustomAuthenticationEntryPoint())	
+			
+			//Using JWT Custom Exception AuthenticationEntryPoint	
+			jwtAuth -> jwtAuth.authenticationEntryPoint(new JwtAuthenticationEntryPoint())	
 		); 
 		
 		//Using Custom Exception to handle AccessDenielHandler()	
