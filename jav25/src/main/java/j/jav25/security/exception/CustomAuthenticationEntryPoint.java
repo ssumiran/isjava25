@@ -31,7 +31,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 	        		HttpStatus.UNAUTHORIZED.value(),
 	        		request.getRequestURI()
 	        	);
-        System.out.println("secErrorResponse: "+secErrorResponse);
+        //System.out.println("secErrorResponse: "+secErrorResponse);
         response.getWriter().write(new ObjectMapper().writeValueAsString(secErrorResponse));
 	}
 }

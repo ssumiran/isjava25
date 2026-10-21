@@ -31,6 +31,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler{
 	        		HttpStatus.FORBIDDEN.value(),
 	        		request.getRequestURI()
 	        	);
+        //System.out.println("secErrorResponse: "+secErrorResponse);
         response.getWriter().write(new ObjectMapper().writeValueAsString(secErrorResponse));
 	}
 }
