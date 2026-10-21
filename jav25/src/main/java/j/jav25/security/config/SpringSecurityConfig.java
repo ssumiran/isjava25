@@ -17,10 +17,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import j.jav25.security.exception.CustomAccessDeniedHandler;
 import j.jav25.security.exception.CustomAuthenticationEntryPoint;
 import j.jav25.security.security.JwtAuthenticationEntryPoint;
+import j.jav25.security.security.JwtAuthenticationFilter;
 
 
 @Configuration
@@ -28,9 +30,12 @@ import j.jav25.security.security.JwtAuthenticationEntryPoint;
 public class SpringSecurityConfig {
 	
 	private UserDetailsService userDetailsService;
+	private JwtAuthenticationFilter jwtAuthenticationFilter;
     
-    public SpringSecurityConfig(UserDetailsService userDetailsService) {
+    public SpringSecurityConfig(UserDetailsService userDetailsService, 
+    							JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.userDetailsService = userDetailsService;
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 	
     @Bean
@@ -81,6 +86,9 @@ public class SpringSecurityConfig {
 			//Using JWT Custom Exception AuthenticationEntryPoint	
 			jwtAuth -> jwtAuth.authenticationEntryPoint(new JwtAuthenticationEntryPoint())	
 		); 
+		
+		//Add Filter Before meaning to execute this before other DAO user-password filter
+		http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 		
 		//Using Custom Exception to handle AccessDenielHandler()	
 		http.exceptionHandling(ex -> ex.accessDeniedHandler(new CustomAccessDeniedHandler()));
