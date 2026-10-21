@@ -18,6 +18,7 @@ import j.jav25.security.entity.SecUser;
 import j.jav25.security.exception.EmailAlreadyExistsException;
 import j.jav25.security.repository.SecRoleRepository;
 import j.jav25.security.repository.SecUserRepository;
+import j.jav25.security.security.JwtTokenProvider;
 import j.jav25.security.service.AuthService;
 
 @Service
@@ -27,13 +28,17 @@ public class AuthServiceImpl implements AuthService {
 	private SecUserRepository secUserRepository;
 	private SecRoleRepository secRoleRepository;
 	private AuthenticationManager authenticationManager;
+	private JwtTokenProvider jwtTokenProvider; 
 
 	public AuthServiceImpl(PasswordEncoder passwordEncoder, SecUserRepository secUserRepository,
-			SecRoleRepository secRoleRepository, AuthenticationManager authenticationManager) {
+			SecRoleRepository secRoleRepository, AuthenticationManager authenticationManager,
+			JwtTokenProvider jwtTokenProvider) {
+		
 		this.passwordEncoder = passwordEncoder;
 		this.secUserRepository = secUserRepository;
 		this.secRoleRepository = secRoleRepository;
 		this.authenticationManager = authenticationManager;
+		this.jwtTokenProvider =jwtTokenProvider; 
 	}
 
 	@Override
@@ -77,7 +82,7 @@ public class AuthServiceImpl implements AuthService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String token = "ssucces tests";
+        String token = jwtTokenProvider.generateToken(authentication);
 
         return token;
 	}
