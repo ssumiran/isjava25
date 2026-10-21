@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/v{version}/products")
+//@RestController
+//@RequestMapping("/api/v{version}/products")
 // /api/v1.0/products
 // /api/v2.0/products
 // /api/v3.0/products
