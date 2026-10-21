@@ -4,7 +4,9 @@ import java.time.LocalDateTime;
 
 public record ErrorDetails(
 		LocalDateTime timestamp,
+		String error,		
+		int status,
 		String messages,
-		String details,
-		String errorCode) 
-{}
+		String path
+){	
+}

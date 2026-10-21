@@ -11,48 +11,52 @@ import j.jav25.security.dto.LoginDto;
 import j.jav25.security.dto.RegisterDto;
 import j.jav25.security.entity.SecRole;
 import j.jav25.security.entity.SecUser;
+import j.jav25.security.exception.EmailAlreadyExistsException;
 import j.jav25.security.repository.SecRoleRepository;
 import j.jav25.security.repository.SecUserRepository;
 import j.jav25.security.service.AuthService;
 
 @Service
-public class AuthServiceImpl implements AuthService{
+public class AuthServiceImpl implements AuthService {
 
-    private PasswordEncoder passwordEncoder;
+	private PasswordEncoder passwordEncoder;
 	private SecUserRepository secUserRepository;
 	private SecRoleRepository secRoleRepository;
-	
-	public AuthServiceImpl (PasswordEncoder passwordEncoder,
-			SecUserRepository secUserRepository,  SecRoleRepository secRoleRepository) {
+
+	public AuthServiceImpl(PasswordEncoder passwordEncoder, SecUserRepository secUserRepository,
+			SecRoleRepository secRoleRepository) {
 		this.passwordEncoder = passwordEncoder;
-		this.secUserRepository= secUserRepository;
+		this.secUserRepository = secUserRepository;
 		this.secRoleRepository = secRoleRepository;
-		
 	}
-	
+
 	@Override
 	public String register(RegisterDto registerDto) {
+
+		if (secUserRepository.existsByUsername(registerDto.username())) {
+			throw new UsernameNotFoundException("Username already exists.");
+		}
 		
-		if(secUserRepository.existsByUsername(registerDto.username())){
-		    throw new UsernameNotFoundException("Username already exists.");
+		if(secUserRepository.existsByEmail(registerDto.email())){ 
+			throw new EmailAlreadyExistsException("Email already exists."); 
 		}
 
-        SecUser serUser = new SecUser();
-        serUser.setName(registerDto.name());
-        serUser.setUsername(registerDto.username());
-        serUser.setEmail(registerDto.email());
-        serUser.setPassword(passwordEncoder.encode(registerDto.password()));
+		SecUser serUser = new SecUser();
+		serUser.setName(registerDto.name());
+		serUser.setUsername(registerDto.username());
+		serUser.setEmail(registerDto.email());
+		serUser.setPassword(passwordEncoder.encode(registerDto.password()));
 
-        Set<SecRole> secRoles = new HashSet<>();
-        for (String r : registerDto.roles()){
-        	secRoles.add(secRoleRepository.findByName(r));
-        }
+		Set<SecRole> secRoles = new HashSet<>();
+		for (String r : registerDto.roles()) {
+			secRoles.add(secRoleRepository.findByName(r));
+		}
 
-        serUser.setSecRoles(secRoles);
+		serUser.setSecRoles(secRoles);
 
-        secUserRepository.save(serUser);
+		secUserRepository.save(serUser);
 
-        return "User Registered Successfully!";
+		return "User Registered Successfully!";
 	}
 
 
