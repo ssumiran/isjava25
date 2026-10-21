@@ -3,6 +3,10 @@ package j.jav25.security.service.impl;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,12 +26,14 @@ public class AuthServiceImpl implements AuthService {
 	private PasswordEncoder passwordEncoder;
 	private SecUserRepository secUserRepository;
 	private SecRoleRepository secRoleRepository;
+	private AuthenticationManager authenticationManager;
 
 	public AuthServiceImpl(PasswordEncoder passwordEncoder, SecUserRepository secUserRepository,
-			SecRoleRepository secRoleRepository) {
+			SecRoleRepository secRoleRepository, AuthenticationManager authenticationManager) {
 		this.passwordEncoder = passwordEncoder;
 		this.secUserRepository = secUserRepository;
 		this.secRoleRepository = secRoleRepository;
+		this.authenticationManager = authenticationManager;
 	}
 
 	@Override
@@ -59,5 +65,21 @@ public class AuthServiceImpl implements AuthService {
 		return "User Registered Successfully!";
 	}
 
+	//Using UsernamePasswordAuthenticationToken
+	@Override
+	public String login(LoginDto loginDto) {
+		Authentication authentication = authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(
+						loginDto.usernameOrEmail(),
+						loginDto.password()
+				)
+		);
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        String token = "ssucces tests";
+
+        return token;
+	}
 
 }
