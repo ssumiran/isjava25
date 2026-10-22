@@ -54,6 +54,29 @@ public class TodoServiceImpl implements TodoService{
 		return convertEntityToDto(todo);
 	}
 	
+	@Override
+    public TodoDto updateTodo(TodoDto todoDto, Long id) {
+
+         Todo todo = todoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Todo not found with id : " + id));
+         
+         todo.setTitle(todoDto.title());
+         todo.setDescription(todoDto.description());
+         todo.setCompleted(todoDto.completed());
+
+         Todo updatedTodo = todoRepository.save(todo);
+
+        return convertEntityToDto(updatedTodo);
+    }
+	
+	@Override
+    public void deleteTodo(Long id) {
+        Todo todo = todoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Todo not found with id : " + id));
+
+        todoRepository.deleteById(id);
+    }
+	
 	private Todo convertDtoToEntity (TodoDto t) {
 		Todo todo = new Todo(
 				t.title(),
