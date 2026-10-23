@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,14 +26,17 @@ public class TodoAuthServiceImpl implements TodoAuthService{
 
 	private TodoUserRepository todoUserRepository;
 	private TodoRoleRepository todoRoleRepository;
+	private AuthenticationManager authenticationManager;
 	private PasswordEncoder passwordEncoder;
 	
 	public TodoAuthServiceImpl (TodoUserRepository todoUserRepository,
 								TodoRoleRepository todoRoleRepository,
+								AuthenticationManager authenticationManager,
 								PasswordEncoder passwordEncoder
 								) {
 		this.todoUserRepository = todoUserRepository;
 		this.todoRoleRepository = todoRoleRepository;
+		this.authenticationManager = authenticationManager;
 		this.passwordEncoder = passwordEncoder;
 	}
 	
@@ -67,6 +71,17 @@ public class TodoAuthServiceImpl implements TodoAuthService{
 
 	@Override
 	public String login(TodoLoginDto loginDto) {
+		Authentication authentication = 
+			authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(
+					loginDto.usernameOrEmail(),
+					loginDto.password()
+        ));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        String token =" Here is token" ;
+        return token;
 	}
 
 }
