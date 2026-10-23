@@ -12,6 +12,11 @@ Users: 	-Admin
 	-In-complete Todo accessed by Admin, User
 
 2. Register and Login Rest APIs
+	-Create RegisterDto class
+	-Create TodoApiException
+	-Create AuthService interface and defines register() method
+	-Create AuthServiceImpl class implements register() method
+	-Create AuthController class @RestController
 	-Exception handling in Register API
 
 3. Secure Rest APIs using JWT Token	
