@@ -65,8 +65,8 @@ public class SpringSecurityConfig {
 				//.anyRequest().permitAll()      // Allow all URIs
 			
 //Using Roles hasRole, hasAnyRole
-				.requestMatchers(HttpMethod.GET, "/api/todos").hasAnyRole("USER","ADMIN")
-				.requestMatchers(HttpMethod.POST, "/api/todos").hasRole("ADMIN")
+				//.requestMatchers(HttpMethod.GET, "/api/todos").hasAnyRole("USER","ADMIN")
+				//.requestMatchers(HttpMethod.POST, "/api/todos").hasRole("ADMIN")
 				
 				.requestMatchers("/api/auth/**").permitAll()
 				.anyRequest().authenticated()
