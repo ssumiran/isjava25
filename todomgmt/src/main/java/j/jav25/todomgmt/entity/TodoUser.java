@@ -43,7 +43,7 @@ public class TodoUser {
         joinColumns = @JoinColumn(name = "todouser_id", referencedColumnName = "id"),
         inverseJoinColumns = @JoinColumn(name = "todorole_id", referencedColumnName = "id")
     )
-    private Set<TodoRole> todoroles;
+    private Set<TodoRole> todoRoles;
 	
 	
 }
