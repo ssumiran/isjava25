@@ -29,7 +29,7 @@ public class TodoCustomUserDetailsService  implements UserDetailsService {
 		TodoUser todoUser = todoUserRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
 	            .orElseThrow(() -> new UsernameNotFoundException("User not exists by Username or Email"));
 	
-	    Set<GrantedAuthority> authorities = todoUser.getTodoroles().stream()
+	    Set<GrantedAuthority> authorities = todoUser.getTodoRoles().stream()
 	    		.map( (role) -> new SimpleGrantedAuthority(role.getName()))	            
 	            .collect(Collectors.toSet());
 	
