@@ -36,10 +36,10 @@
 		</dependency>
 
 <!--Security-->
-		<!--<dependency>
+		<dependency>
 	      <groupId>org.springframework.boot</groupId>
 	      <artifactId>spring-boot-starter-security</artifactId>
-	    </dependency>-->
+	    </dependency>
 
 <!--JWT 3-dependencies jjwt-api, -impl, -jackson -->	    
 	    <!--<dependency>
