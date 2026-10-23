@@ -3,6 +3,10 @@ package j.jav25.todomgmt.config;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+import j.jav25.todomgmt.security.TodoCustomUserDetailsService;
+import j.jav25.todomgmt.security.TodoJwtAuthenticationEntryPoint;
+import j.jav25.todomgmt.security.TodoJwtAuthenticationFilter;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -19,15 +23,22 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-/*import j.jav25.security.exception.CustomAccessDeniedHandler;
-import j.jav25.security.exception.CustomAuthenticationEntryPoint;
-import j.jav25.security.security.JwtAuthenticationEntryPoint;
-import j.jav25.security.security.JwtAuthenticationFilter;*/
-
 
 @Configuration
 @EnableMethodSecurity
 public class SpringSecurityConfig {
+
+    private TodoCustomUserDetailsService todoCustomUserDetailsService;
+    private TodoJwtAuthenticationEntryPoint todoJwtAuthenticationEntryPoint;
+    private TodoJwtAuthenticationFilter todoJwtAuthenticationFilter;
+
+    SpringSecurityConfig(TodoCustomUserDetailsService todoCustomUserDetailsService,
+    				TodoJwtAuthenticationEntryPoint todoJwtAuthenticationEntryPoint,
+    				TodoJwtAuthenticationFilter todoJwtAuthenticationFilter) {
+        this.todoCustomUserDetailsService = todoCustomUserDetailsService;
+        this.todoJwtAuthenticationEntryPoint = todoJwtAuthenticationEntryPoint;
+		this.todoJwtAuthenticationFilter = todoJwtAuthenticationFilter;
+    }
 	
 	/*
 	 * private UserDetailsService userDetailsService; //private
@@ -44,7 +55,7 @@ public class SpringSecurityConfig {
     }
 	
 	@Bean   //This is custom security chain
-	SecurityFilterChain secFilterChain(HttpSecurity http) {
+	SecurityFilterChain secFilterChain(HttpSecurity http) throws Exception {
 		
 			
 		http.authorizeHttpRequests(					//To enable each Request need to authenticated
@@ -66,19 +77,16 @@ public class SpringSecurityConfig {
 		
 		http.httpBasic(withDefaults()  //Activate default Form Login for PostMan
 				
-			//Using Custom Exception AuthenticationEntryPoint	
-			//basicAuth -> basicAuth.authenticationEntryPoint(new CustomAuthenticationEntryPoint())	
-			
 			//Using JWT Custom Exception AuthenticationEntryPoint	
-			//jwtAuth -> jwtAuth.authenticationEntryPoint(new JwtAuthenticationEntryPoint())	
+			//jwtAuth -> jwtAuth.authenticationEntryPoint(new TodoJwtAuthenticationEntryPoint())	
 		); 
+				
+		//Using Exception to handle TodoJwtAuthenticationEntryPoint()	
+		http.exceptionHandling( ex -> ex.authenticationEntryPoint(new TodoJwtAuthenticationEntryPoint()) );
 		
 		//Add Filter Before meaning to execute this before other DAO user-password filter
-		//http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-		
-		//Using Custom Exception to handle AccessDenielHandler()	
-		//http.exceptionHandling(ex -> ex.accessDeniedHandler(new CustomAccessDeniedHandler()));
-		
+		http.addFilterBefore(todoJwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
 		//Disable Cross-Site Request Forgery
 		http.csrf(csrf -> csrf.disable());
 				

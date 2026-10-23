@@ -19,6 +19,7 @@ import j.jav25.todomgmt.entity.TodoUser;
 import j.jav25.todomgmt.exception.TodoApiException;
 import j.jav25.todomgmt.repository.TodoRoleRepository;
 import j.jav25.todomgmt.repository.TodoUserRepository;
+import j.jav25.todomgmt.security.TodoJwtTokenProvider;
 import j.jav25.todomgmt.service.TodoAuthService;
 
 @Service
@@ -28,16 +29,19 @@ public class TodoAuthServiceImpl implements TodoAuthService{
 	private TodoRoleRepository todoRoleRepository;
 	private AuthenticationManager authenticationManager;
 	private PasswordEncoder passwordEncoder;
+	private TodoJwtTokenProvider todoJwtTokenProvider;
 	
 	public TodoAuthServiceImpl (TodoUserRepository todoUserRepository,
 								TodoRoleRepository todoRoleRepository,
 								AuthenticationManager authenticationManager,
-								PasswordEncoder passwordEncoder
+								PasswordEncoder passwordEncoder,
+								TodoJwtTokenProvider todoJwtTokenProvider
 								) {
 		this.todoUserRepository = todoUserRepository;
 		this.todoRoleRepository = todoRoleRepository;
 		this.authenticationManager = authenticationManager;
 		this.passwordEncoder = passwordEncoder;
+		this.todoJwtTokenProvider = todoJwtTokenProvider;
 	}
 	
 	@Override
@@ -80,8 +84,7 @@ public class TodoAuthServiceImpl implements TodoAuthService{
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String token =" Here is token" ;
-        return token;
+        return todoJwtTokenProvider.generateToken(authentication);
 	}
 
 }
