@@ -10,13 +10,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import j.sec.model.Customer;
+import j.sec.entity.Customer;
 import j.sec.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class LoginUserDetailsService implements UserDetailsService {
+public class CustomerService implements UserDetailsService {
 
     private final CustomerRepository customerRepository;
 

@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import j.sec.model.Customer;
+import j.sec.entity.Customer;
 import j.sec.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("")
-public class UserController {
+public class CustomerController {
 
 	private final CustomerRepository customerRepository;
     private final PasswordEncoder passwordEncoder;

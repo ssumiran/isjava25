@@ -1,4 +1,4 @@
-package j.sec.model;
+package j.sec.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -7,7 +7,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 
 @Entity @Getter @Setter
@@ -16,11 +15,17 @@ public class Customer {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Column(name = "firstname")
     private String firstName;
+
+    @Column(name = "lastname")
     private String lastName;
-    @NonNull
+    
+    @Column(nullable = false)
     private String email;
-    @NonNull
+    
+    @Column(nullable = false)
     private String pwd;
     @Column(name = "role")
     private String role;
