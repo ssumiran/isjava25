@@ -50,11 +50,11 @@ public class SecConfigSecurityFilter {
 	//Using Database Users   JdbcUserDetailsManager(dataSource)
 	//Using JdbcUserDetailsManager has pre defined schema structure tables
 	//User table and Authorities table
-	@Bean
+/*	@Bean
 	UserDetailsService userDetailsService(DataSource dataSource) {
         return new JdbcUserDetailsManager(dataSource);
 	}    
-
+*/
     @Bean
     PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
