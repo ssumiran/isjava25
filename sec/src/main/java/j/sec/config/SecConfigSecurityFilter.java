@@ -28,11 +28,13 @@ public class SecConfigSecurityFilter {
         http.authorizeHttpRequests( 
         	(requests) -> requests
                 .requestMatchers("/myAccount", "/myBalance", "/myLoans", "/myCards").authenticated()
-                .requestMatchers("/notices", "/contact", "/error").permitAll()
+                .requestMatchers("/notices", "/contact", "/error","/register").permitAll()
         );
         
         http.formLogin(withDefaults());
         http.httpBasic(withDefaults());
+        
+        http.csrf(csrf -> csrf.disable());
         
         return http.build();
     }
